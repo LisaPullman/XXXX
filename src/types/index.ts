@@ -1,49 +1,111 @@
-// 用户相关类型
+// 基础用户类型
 export interface User {
   id: string;
   email: string;
   username: string;
+  avatar?: string;
   preferredLanguage: string;
   timezone: string;
   region: string;
+  birthDate?: Date;
+  birthTime?: string;
+  birthLocation?: {
+    city: string;
+    province: string;
+    latitude: number;
+    longitude: number;
+  };
+  gender?: 'male' | 'female' | 'other';
   createdAt: Date;
   updatedAt: Date;
-  avatar?: string;
-  bio?: string;
-  birthDate?: Date;
-  gender?: 'male' | 'female' | 'other';
-  location?: string;
-  phone?: string;
-  emailVerified?: boolean;
-  phoneVerified?: boolean;
-  twoFactorEnabled?: boolean;
-  profileCompleted?: boolean;
-  mbtiType?: string;
-  astrologySign?: string;
-  preferences?: UserPreferences;
 }
 
-// 用户偏好设置
-export interface UserPreferences {
-  theme: 'light' | 'dark' | 'auto';
-  language: string;
-  notifications: {
-    email: boolean;
-    push: boolean;
-    sms: boolean;
-    marketing: boolean;
+// 位置数据类型
+export interface LocationData {
+  city: string;
+  province: string;
+  latitude: number;
+  longitude: number;
+}
+
+// MBTI相关类型
+export interface MBTIAnswer {
+  questionId: number;
+  answer: number; // 1-5分
+  dimension: 'EI' | 'SN' | 'TF' | 'JP';
+}
+
+export interface MBTIResult {
+  type: string; // 如 'INTJ'
+  dimensions: {
+    EI: number; // 外向性得分 (-100 到 100)
+    SN: number; // 感觉-直觉得分
+    TF: number; // 思考-情感得分
+    JP: number; // 判断-感知得分
   };
-  privacy: {
-    profileVisibility: 'public' | 'private' | 'friends';
-    showEmail: boolean;
-    showPhone: boolean;
-    showBirthDate: boolean;
-  };
-  accessibility: {
-    reducedMotion: boolean;
-    highContrast: boolean;
-    largeText: boolean;
-  };
+  confidence: number; // 置信度 (0-1)
+  description: string;
+  strengths: string[];
+  challenges: string[];
+  careers: string[];
+  relationships: string[];
+  completedAt: Date;
+}
+
+// 星座相关类型
+export type ZodiacSign = 
+  | 'aries' | 'taurus' | 'gemini' | 'cancer' 
+  | 'leo' | 'virgo' | 'libra' | 'scorpio' 
+  | 'sagittarius' | 'capricorn' | 'aquarius' | 'pisces';
+
+export interface ZodiacInfo {
+  name: string;
+  symbol: string;
+  element: 'fire' | 'earth' | 'air' | 'water';
+  quality: 'cardinal' | 'fixed' | 'mutable';
+  dates: string;
+  description: string;
+  traits: string[];
+  compatibility: ZodiacSign[];
+  colors: string[];
+  stones: string[];
+}
+
+export interface AstrologyResult {
+  sunSign: ZodiacSign;
+  moonSign?: ZodiacSign;
+  ascendant?: ZodiacSign;
+  birthChart?: any;
+  personality: string;
+  love: string;
+  career: string;
+  health: string;
+  fortune: string;
+  luckyNumbers: number[];
+  luckyColors: string[];
+  compatibility: {
+    sign: ZodiacSign;
+    score: number;
+    description: string;
+  }[];
+  completedAt: Date;
+}
+
+// AI分析相关类型
+export interface AIAnalysisResponse {
+  analysis: string;
+  suggestions: string[];
+  keywords: string[];
+  confidence?: number;
+  relatedTopics?: string[];
+}
+
+export interface AIMessage {
+  id: string;
+  type: 'user' | 'ai';
+  content: string;
+  timestamp: Date;
+  role?: 'user' | 'assistant';
 }
 
 // 通知类型
@@ -54,11 +116,24 @@ export interface Notification {
   message: string;
   timestamp: Date;
   read: boolean;
-  duration?: number;
-  action?: {
-    label: string;
-    onClick: () => void;
-  };
+}
+
+// 测试结果基础类型
+export interface TestResult {
+  id: string;
+  userId: string;
+  type: 'mbti' | 'astrology' | 'blood_type' | 'palmistry';
+  result: any;
+  aiAnalysis?: AIAnalysisResponse;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+// 应用状态类型
+export interface AppState {
+  notifications: Notification[];
+  isLoading: boolean;
+  error: string | null;
 }
 
 // API响应类型
@@ -66,111 +141,5 @@ export interface ApiResponse<T = any> {
   success: boolean;
   data?: T;
   message?: string;
-  error?: string;
   errors?: Record<string, string>;
-}
-
-// 表单验证类型
-export interface ValidationResult {
-  isValid: boolean;
-  errors: Record<string, string>;
-}
-
-// 组件Props类型
-export interface ComponentProps {
-  className?: string;
-  children?: React.ReactNode;
-}
-
-// 表单数据类型
-export interface LoginFormData {
-  email: string;
-  password: string;
-}
-
-export interface RegisterFormData {
-  email: string;
-  password: string;
-  confirmPassword: string;
-  username: string;
-  acceptTerms: boolean;
-}
-
-// MBTI 测试相关类型
-export type MBTIType =
-  | 'INTJ' | 'INTP' | 'ENTJ' | 'ENTP'
-  | 'INFJ' | 'INFP' | 'ENFJ' | 'ENFP'
-  | 'ISTJ' | 'ISFJ' | 'ESTJ' | 'ESFJ'
-  | 'ISTP' | 'ISFP' | 'ESTP' | 'ESFP';
-
-export interface MBTIDimensions {
-  EI: number; // Extraversion (E) vs. Introversion (I)
-  SN: number; // Sensing (S) vs. Intuition (N)
-  TF: number; // Thinking (T) vs. Feeling (F)
-  JP: number; // Judging (J) vs. Perceiving (P)
-}
-
-export interface MBTIQuestion {
-  id: number;
-  question: string;
-  options: {
-    A: string;
-    B: string;
-  };
-  dimension: 'EI' | 'SN' | 'TF' | 'JP';
-  weight: number;
-}
-
-export interface MBTIAnswer {
-  questionId: number;
-  answer: 'A' | 'B';
-}
-
-export interface MBTIResult {
-  type: MBTIType;
-  dimensions: MBTIDimensions;
-  confidence: number;
-  completedAt: Date;
-}
-
-// 星座相关类型
-export type ZodiacSign =
-  | 'aries' | 'taurus' | 'gemini' | 'cancer' | 'leo' | 'virgo'
-  | 'libra' | 'scorpio' | 'sagittarius' | 'capricorn' | 'aquarius' | 'pisces';
-
-export interface ZodiacInfo {
-  name: string;
-  symbol: string;
-  element: 'fire' | 'earth' | 'air' | 'water';
-  quality: 'cardinal' | 'fixed' | 'mutable';
-  rulingPlanet: string;
-  dateRange: string;
-  description: string;
-  traits: {
-    positive: string[];
-    negative: string[];
-  };
-  compatibility: {
-    best: ZodiacSign[];
-    good: ZodiacSign[];
-    challenging: ZodiacSign[];
-  };
-  luckyNumbers: number[];
-  luckyColors: string[];
-  career: string[];
-  love: string;
-  health: string;
-}
-
-export interface AstrologyResult {
-  sunSign: ZodiacSign;
-  element: 'fire' | 'earth' | 'air' | 'water';
-  quality: 'cardinal' | 'fixed' | 'mutable';
-  rulingPlanet: string;
-  birthDate: string;
-  traits: string[];
-  compatibility: ZodiacSign[];
-  luckyNumbers: number[];
-  luckyColors: string[];
-  completedAt: Date;
 }

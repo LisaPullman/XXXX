@@ -1,26 +1,26 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
-// https://vite.dev/config/
+// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  server: {
-    port: 5173,
-    host: true,
-    open: true,
+  esbuild: {
+    target: 'es2020'
   },
   build: {
-    outDir: 'dist',
-    sourcemap: false,
-    minify: 'terser',
+    target: 'es2020',
     rollupOptions: {
       output: {
         manualChunks: {
-          vendor: ['react', 'react-dom'],
-          router: ['react-router-dom'],
-          utils: ['zustand'],
-        },
-      },
-    },
+          'react-vendor': ['react', 'react-dom'],
+          'router-vendor': ['react-router-dom'],
+          'ui-vendor': ['zustand']
+        }
+      }
+    }
   },
+  server: {
+    port: 5173,
+    host: true
+  }
 })

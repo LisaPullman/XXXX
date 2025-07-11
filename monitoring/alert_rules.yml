@@ -1,0 +1,134 @@
+# Prometheus告警规则
+groups:
+  - name: inner-cosmos-alerts
+    rules:
+      # 服务可用性告警
+      - alert: ServiceDown
+        expr: up == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "服务 {{ $labels.instance }} 不可用"
+          description: "服务 {{ $labels.instance }} 已经停机超过1分钟"
+
+      # 网站可用性告警
+      - alert: WebsiteDown
+        expr: probe_success == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "网站 {{ $labels.instance }} 不可访问"
+          description: "网站 {{ $labels.instance }} 无法访问超过1分钟"
+
+      # 高CPU使用率告警
+      - alert: HighCPUUsage
+        expr: 100 - (avg by(instance) (irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 80
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "服务器 {{ $labels.instance }} CPU使用率过高"
+          description: "服务器 {{ $labels.instance }} CPU使用率超过80%，当前值: {{ $value }}%"
+
+      # 高内存使用率告警
+      - alert: HighMemoryUsage
+        expr: (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) * 100 > 85
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "服务器 {{ $labels.instance }} 内存使用率过高"
+          description: "服务器 {{ $labels.instance }} 内存使用率超过85%，当前值: {{ $value }}%"
+
+      # 磁盘空间不足告警
+      - alert: DiskSpaceLow
+        expr: (1 - (node_filesystem_avail_bytes{fstype!="tmpfs"} / node_filesystem_size_bytes{fstype!="tmpfs"})) * 100 > 85
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "服务器 {{ $labels.instance }} 磁盘空间不足"
+          description: "服务器 {{ $labels.instance }} 磁盘 {{ $labels.mountpoint }} 使用率超过85%，当前值: {{ $value }}%"
+
+      # API响应时间过长告警
+      - alert: HighAPIResponseTime
+        expr: histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m])) > 2
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "API响应时间过长"
+          description: "API 95%分位响应时间超过2秒，当前值: {{ $value }}秒"
+
+      # API错误率过高告警
+      - alert: HighAPIErrorRate
+        expr: rate(http_requests_total{status=~"5.."}[5m]) / rate(http_requests_total[5m]) * 100 > 5
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "API错误率过高"
+          description: "API 5xx错误率超过5%，当前值: {{ $value }}%"
+
+      # Redis连接失败告警
+      - alert: RedisDown
+        expr: redis_up == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Redis服务不可用"
+          description: "Redis服务已停机超过1分钟"
+
+      # 容器重启告警
+      - alert: ContainerRestarted
+        expr: increase(container_start_time_seconds[1h]) > 0
+        labels:
+          severity: warning
+        annotations:
+          summary: "容器 {{ $labels.name }} 重启"
+          description: "容器 {{ $labels.name }} 在过去1小时内重启了"
+
+      # SSL证书即将过期告警
+      - alert: SSLCertificateExpiringSoon
+        expr: probe_ssl_earliest_cert_expiry - time() < 86400 * 7
+        for: 1h
+        labels:
+          severity: warning
+        annotations:
+          summary: "SSL证书即将过期"
+          description: "{{ $labels.instance }} 的SSL证书将在7天内过期"
+
+  - name: business-alerts
+    rules:
+      # 用户注册异常告警
+      - alert: LowUserRegistration
+        expr: increase(user_registrations_total[1h]) < 1
+        for: 2h
+        labels:
+          severity: info
+        annotations:
+          summary: "用户注册量异常"
+          description: "过去2小时内用户注册量低于正常水平"
+
+      # MBTI测试完成率低告警
+      - alert: LowMBTICompletionRate
+        expr: rate(mbti_tests_completed_total[1h]) / rate(mbti_tests_started_total[1h]) < 0.7
+        for: 1h
+        labels:
+          severity: warning
+        annotations:
+          summary: "MBTI测试完成率过低"
+          description: "MBTI测试完成率低于70%，当前值: {{ $value }}"
+
+      # AI API调用失败率高告警
+      - alert: HighAIAPIFailureRate
+        expr: rate(ai_api_requests_failed_total[5m]) / rate(ai_api_requests_total[5m]) * 100 > 10
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "AI API调用失败率过高"
+          description: "AI API调用失败率超过10%，当前值: {{ $value }}%"

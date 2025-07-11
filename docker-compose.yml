@@ -1,0 +1,111 @@
+version: '3.8'
+
+services:
+  # 前端服务 (Nginx)
+  frontend:
+    image: nginx:alpine
+    container_name: inner-cosmos-frontend
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./dist:/usr/share/nginx/html
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./ssl:/etc/nginx/ssl
+    depends_on:
+      - backend
+    restart: unless-stopped
+    networks:
+      - inner-cosmos-network
+
+  # 后端服务
+  backend:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: inner-cosmos-backend
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+      - MONGODB_URI=${MONGODB_URI}
+      - JWT_SECRET=${JWT_SECRET}
+      - JWT_REFRESH_SECRET=${JWT_REFRESH_SECRET}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - REDIS_URL=redis://redis:6379
+    volumes:
+      - ./logs:/app/logs
+      - ./uploads:/app/uploads
+    depends_on:
+      - redis
+    restart: unless-stopped
+    networks:
+      - inner-cosmos-network
+
+  # Redis缓存服务
+  redis:
+    image: redis:7-alpine
+    container_name: inner-cosmos-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD}
+    restart: unless-stopped
+    networks:
+      - inner-cosmos-network
+
+  # MongoDB数据库 (可选，推荐使用云数据库)
+  # mongodb:
+  #   image: mongo:6
+  #   container_name: inner-cosmos-mongodb
+  #   ports:
+  #     - "27017:27017"
+  #   environment:
+  #     - MONGO_INITDB_ROOT_USERNAME=${MONGO_USERNAME}
+  #     - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASSWORD}
+  #     - MONGO_INITDB_DATABASE=inner-cosmos
+  #   volumes:
+  #     - mongodb_data:/data/db
+  #     - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+  #   restart: unless-stopped
+  #   networks:
+  #     - inner-cosmos-network
+
+  # 监控服务 (可选)
+  # prometheus:
+  #   image: prom/prometheus
+  #   container_name: inner-cosmos-prometheus
+  #   ports:
+  #     - "9090:9090"
+  #   volumes:
+  #     - ./prometheus.yml:/etc/prometheus/prometheus.yml
+  #     - prometheus_data:/prometheus
+  #   restart: unless-stopped
+  #   networks:
+  #     - inner-cosmos-network
+
+  # 日志收集 (可选)
+  # grafana:
+  #   image: grafana/grafana
+  #   container_name: inner-cosmos-grafana
+  #   ports:
+  #     - "3000:3000"
+  #   environment:
+  #     - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
+  #   volumes:
+  #     - grafana_data:/var/lib/grafana
+  #   restart: unless-stopped
+  #   networks:
+  #     - inner-cosmos-network
+
+volumes:
+  redis_data:
+  # mongodb_data:
+  # prometheus_data:
+  # grafana_data:
+
+networks:
+  inner-cosmos-network:
+    driver: bridge

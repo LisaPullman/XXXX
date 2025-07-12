@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import { Button } from '../ui/Button';
 import { Card, CardContent, CardHeader } from '../ui/Card';
 import type { MBTIResult } from '../../types';
-import { getMBTITypeDescription } from '../../utils/mbtiCalculator';
+import { getMBTITypeDescription } from '../../modules/mbti/utils/mbtiCalculator';
 import { cn } from '../../utils/cn';
 
 interface SharePosterProps {

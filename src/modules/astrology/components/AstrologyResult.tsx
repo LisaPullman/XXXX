@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { Button } from '../ui/Button';
-import { Card, CardContent, CardHeader } from '../ui/Card';
-import { AstrologyResult, ZodiacSign } from '../../types';
-import { astrologyCalculator } from '../../utils/astrologyCalculator';
-import { cn } from '../../utils/cn';
+import { Button } from '../../../components/ui/Button';
+import { Card, CardContent, CardHeader } from '../../../components/ui/Card';
+import { AstrologyResult as AstrologyResultType, ZodiacSign } from '../types';
+import { astrologyCalculator } from '../utils/astrologyCalculator';
+import { cn } from '../../../utils/cn';
 
 interface AstrologyResultProps {
-  result: AstrologyResult;
+  result: AstrologyResultType;
   onRetake?: () => void;
   onShare?: () => void;
   className?: string;
@@ -14,7 +14,7 @@ interface AstrologyResultProps {
 
 type TabType = 'overview' | 'compatibility' | 'horoscope';
 
-export const AstrologyResultComponent: React.FC<AstrologyResultProps> = ({
+export const AstrologyResult: React.FC<AstrologyResultProps> = ({
   result,
   onRetake,
   onShare,

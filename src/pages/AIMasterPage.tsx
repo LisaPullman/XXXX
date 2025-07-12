@@ -2,11 +2,53 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/Button';
 import { useThemeStore } from '../stores/useThemeStore';
+import { AIMasterTest } from '../modules/ai-master/components/AIMasterTest';
+// import { AIStatus } from '../components/features/AIStatus'; // 暂时注释掉
+import { useTestHistoryStore } from '../stores/useTestHistoryStore';
 
 export const AIMasterPage: React.FC = () => {
   const navigate = useNavigate();
   const { theme } = useThemeStore();
+  const { history } = useTestHistoryStore();
   const [selectedService, setSelectedService] = useState<string | null>(null);
+  const [showAITest, setShowAITest] = useState(false);
+
+  // 准备可用的测试结果
+  const availableResults = history.reduce((acc, test) => {
+    acc[test.type] = test.result;
+    return acc;
+  }, {} as any);
+
+  const handleStartAI = () => {
+    if (selectedService) {
+      setShowAITest(true);
+    }
+  };
+
+  const handleAIComplete = (result: any) => {
+    console.log('AI分析完成:', result);
+    // 这里可以导航到结果页面或显示结果
+    setShowAITest(false);
+  };
+
+  // 如果显示AI测试，渲染AI测试组件
+  if (showAITest) {
+    return (
+      <div className={`min-h-screen transition-colors duration-300 ${
+        theme === 'dark'
+          ? 'bg-gradient-to-br from-slate-900 via-indigo-900 to-slate-900'
+          : 'bg-gradient-to-br from-indigo-50 via-blue-50 to-purple-50'
+      }`}>
+        <div className="px-4 sm:px-6 lg:px-8 py-8">
+          <AIMasterTest
+            onComplete={handleAIComplete}
+            availableResults={availableResults}
+            className="max-w-4xl mx-auto"
+          />
+        </div>
+      </div>
+    );
+  }
 
   const aiServices = [
     {
@@ -207,17 +249,23 @@ export const AIMasterPage: React.FC = () => {
               <Button
                 size="lg"
                 disabled={!selectedService}
+                onClick={handleStartAI}
                 className={`bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white px-8 py-4 text-lg font-semibold rounded-full shadow-xl hover:shadow-indigo-500/25 transform hover:-translate-y-1 transition-all duration-300 ${
                   !selectedService && 'opacity-50 cursor-not-allowed'
                 }`}
               >
-                开始AI分析
+                开始AI分析 (硅基流动驱动)
               </Button>
               <p className={`text-sm mt-3 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-                {selectedService ? '点击开始专业的AI分析' : '请先选择一种AI分析服务'}
+                {selectedService ? '基于硅基流动AI的专业心理分析' : '请先选择一种AI分析服务'}
               </p>
             </div>
           </div>
+
+          {/* AI状态监控 - 暂时注释掉排查问题 */}
+          {/* <div className="mb-12">
+            <AIStatus className="max-w-3xl mx-auto" />
+          </div> */}
 
           {/* AI能力介绍 */}
           <div className="mb-12">
@@ -295,7 +343,7 @@ export const AIMasterPage: React.FC = () => {
             <h2 className={`text-2xl sm:text-3xl font-bold text-center mb-8 ${
               theme === 'dark' ? 'text-white' : 'text-gray-900'
             }`}>
-              技术优势
+              硅基流动AI技术优势
             </h2>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
               <div className={`rounded-xl p-6 ${
@@ -307,10 +355,10 @@ export const AIMasterPage: React.FC = () => {
                   ⚡
                 </div>
                 <h3 className={`text-lg font-bold mb-3 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                  高速处理
+                  硅基流动加速
                 </h3>
                 <p className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
-                  采用最新的GPU加速技术，能够在几分钟内完成复杂的性格分析，大大提升用户体验。
+                  采用硅基流动的先进推理引擎，基于Qwen/QwQ-32B模型，提供毫秒级的AI响应速度和卓越的分析能力。
                 </p>
               </div>
 
@@ -323,10 +371,10 @@ export const AIMasterPage: React.FC = () => {
                   🎯
                 </div>
                 <h3 className={`text-lg font-bold mb-3 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                  精准分析
+                  精准AI分析
                 </h3>
                 <p className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
-                  基于大数据训练的深度学习模型，分析准确率高达95%以上，为您提供可靠的分析结果。
+                  集成硅基流动的多模态大模型，结合心理学专业知识，分析准确率高达95%，提供科学可靠的洞察。
                 </p>
               </div>
 
@@ -339,10 +387,10 @@ export const AIMasterPage: React.FC = () => {
                   🔒
                 </div>
                 <h3 className={`text-lg font-bold mb-3 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                  隐私保护
+                  安全隐私保护
                 </h3>
                 <p className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
-                  采用端到端加密技术，确保您的个人数据安全，所有分析过程都在安全环境中进行。
+                  硅基流动API采用企业级安全标准，数据传输加密，不用于模型训练，确保您的隐私数据完全安全。
                 </p>
               </div>
             </div>

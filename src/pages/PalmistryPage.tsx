@@ -2,11 +2,17 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/Button';
 import { useThemeStore } from '../stores/useThemeStore';
+import { PalmistryTest, PalmistryResult } from '../modules/palmistry';
+import { ReadingType } from '../modules/palmistry/types';
+
+type ViewMode = 'intro' | 'test' | 'result';
 
 export const PalmistryPage: React.FC = () => {
   const navigate = useNavigate();
   const { theme } = useThemeStore();
-  const [selectedAnalysis, setSelectedAnalysis] = useState<string | null>(null);
+  const [viewMode, setViewMode] = useState<ViewMode>('intro');
+  const [selectedAnalysis, setSelectedAnalysis] = useState<ReadingType | null>(null);
+  const [analysisResult, setAnalysisResult] = useState<any>(null);
 
   const palmLines = [
     {
@@ -119,11 +125,95 @@ export const PalmistryPage: React.FC = () => {
   ];
 
   const analysisTypes = [
-    { id: 'palm', name: '手相分析', icon: '🤲', description: '通过手掌纹路解读命运' },
-    { id: 'face', name: '面相分析', icon: '👤', description: '通过面部特征分析性格' },
-    { id: 'combined', name: '综合分析', icon: '🔍', description: '手相面相综合解读' }
+    { id: 'palmistry' as ReadingType, name: '手相分析', icon: '🤲', description: '通过手掌纹路解读命运' },
+    { id: 'face-reading' as ReadingType, name: '面相分析', icon: '👤', description: '通过面部特征分析性格' },
+    { id: 'both' as ReadingType, name: '综合分析', icon: '🔍', description: '手相面相综合解读' }
   ];
 
+  const handleStartAnalysis = () => {
+    if (selectedAnalysis) {
+      setViewMode('test');
+    }
+  };
+
+  const handleAnalysisComplete = (result: any) => {
+    setAnalysisResult(result);
+    setViewMode('result');
+  };
+
+  const handleNewAnalysis = () => {
+    setAnalysisResult(null);
+    setSelectedAnalysis(null);
+    setViewMode('intro');
+  };
+
+  const handleShare = () => {
+    if (analysisResult) {
+      const shareText = `我的${selectedAnalysis === 'palmistry' ? '手相' : selectedAnalysis === 'face-reading' ? '面相' : '手面相'}分析结果！来试试看吧！`;
+      if (navigator.share) {
+        navigator.share({
+          title: '手相面相分析结果',
+          text: shareText,
+          url: window.location.href
+        });
+      } else {
+        navigator.clipboard.writeText(shareText);
+        alert('分析结果已复制到剪贴板');
+      }
+    }
+  };
+
+  // 测试页面
+  if (viewMode === 'test' && selectedAnalysis) {
+    return (
+      <div className={`min-h-screen transition-colors duration-300 ${
+        theme === 'dark'
+          ? 'bg-gradient-to-br from-slate-900 via-green-900 to-slate-900'
+          : 'bg-gradient-to-br from-green-50 via-teal-50 to-emerald-50'
+      }`}>
+        <div className="px-4 sm:px-6 lg:px-8 py-8">
+          <div className="mb-6">
+            <Button
+              variant="outline"
+              onClick={() => setViewMode('intro')}
+              className={`${
+                theme === 'dark'
+                  ? 'border-white/20 text-white hover:bg-white/10'
+                  : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+              }`}
+            >
+              ← 返回
+            </Button>
+          </div>
+          <PalmistryTest
+            readingType={selectedAnalysis}
+            onComplete={handleAnalysisComplete}
+          />
+        </div>
+      </div>
+    );
+  }
+
+  // 结果页面
+  if (viewMode === 'result' && analysisResult) {
+    return (
+      <div className={`min-h-screen transition-colors duration-300 ${
+        theme === 'dark'
+          ? 'bg-gradient-to-br from-slate-900 via-green-900 to-slate-900'
+          : 'bg-gradient-to-br from-green-50 via-teal-50 to-emerald-50'
+      }`}>
+        <div className="px-4 sm:px-6 lg:px-8 py-8">
+          <PalmistryResult
+            result={analysisResult}
+            onRetake={handleNewAnalysis}
+            onShare={handleShare}
+          />
+        </div>
+      </div>
+    );
+  }
+
+  // 介绍页面
   return (
     <div className={`min-h-screen transition-colors duration-300 ${
       theme === 'dark'
@@ -187,6 +277,7 @@ export const PalmistryPage: React.FC = () => {
               <Button
                 size="lg"
                 disabled={!selectedAnalysis}
+                onClick={handleStartAnalysis}
                 className={`bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-700 hover:to-teal-700 text-white px-8 py-4 text-lg font-semibold rounded-full shadow-xl hover:shadow-green-500/25 transform hover:-translate-y-1 transition-all duration-300 ${
                   !selectedAnalysis && 'opacity-50 cursor-not-allowed'
                 }`}
@@ -194,7 +285,7 @@ export const PalmistryPage: React.FC = () => {
                 开始分析
               </Button>
               <p className={`text-sm mt-3 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-                {selectedAnalysis ? '准备上传照片进行AI分析' : '请先选择分析类型'}
+                {selectedAnalysis ? '准备开始详细分析' : '请先选择分析类型'}
               </p>
             </div>
           </div>

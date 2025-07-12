@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { MBTITest } from '../components/features/MBTITest';
-import { MBTIResultComponent } from '../components/features/MBTIResult';
+import { MBTITest } from '../modules/mbti/components/MBTITest';
+import { MBTIResult as MBTIResultComponent } from '../modules/mbti/components/MBTIResult';
 import { Card, CardContent, CardHeader } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
-import type { MBTIAnswer, MBTIResult as MBTIResultType } from '../types';
-import { calculateMBTIResult } from '../utils/mbtiCalculator';
+import type { MBTIAnswer, MBTIResult as MBTIResultType } from '../modules/mbti/types';
+import { calculateAdvancedMBTIResult } from '../modules/mbti/utils/advancedMBTICalculator';
+import type { TestMode } from '../modules/mbti/data/mbtiQuestions';
 import { useAppStore } from '../stores/useAppStore';
 import { useAuthStore } from '../stores/useAuthStore';
 
@@ -23,18 +24,20 @@ export const MBTITestPage: React.FC = () => {
     setTestState('testing');
   };
 
-  const handleTestComplete = (answers: MBTIAnswer[]) => {
+  const handleTestComplete = (answers: MBTIAnswer[], mode: TestMode = 'quick') => {
     try {
-      const result = calculateMBTIResult(answers);
+      const result = calculateAdvancedMBTIResult(answers, mode);
       setTestResult(result);
       setTestState('result');
       
+      const modeText = mode === 'professional' ? '专业完整版' : '快速版';
       addNotification({
         type: 'success',
         title: '测试完成',
-        message: '恭喜您完成MBTI人格测试！',
+        message: `恭喜您完成MBTI人格测试（${modeText}）！`,
       });
     } catch (error) {
+      console.error('MBTI计算错误:', error);
       addNotification({
         type: 'error',
         title: '计算错误',
@@ -158,7 +161,7 @@ export const MBTITestPage: React.FC = () => {
                       <ul className="space-y-3">
                         <li className="flex items-start space-x-3 p-3 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
                           <div className="w-2 h-2 bg-primary-500 rounded-full mt-2 flex-shrink-0"></div>
-                          <span className="text-sm sm:text-base text-gray-700">共28道题目，预计用时5-8分钟</span>
+                          <span className="text-sm sm:text-base text-gray-700">快速版30题/专业版93题，支持双模式测试</span>
                         </li>
                         <li className="flex items-start space-x-3 p-3 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
                           <div className="w-2 h-2 bg-primary-500 rounded-full mt-2 flex-shrink-0"></div>
@@ -206,7 +209,7 @@ export const MBTITestPage: React.FC = () => {
                   <svg className="w-4 h-4 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
                   </svg>
-                  <span>5-8分钟</span>
+                  <span>10-25分钟</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <svg className="w-4 h-4 text-purple-500" fill="currentColor" viewBox="0 0 20 20">

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AstrologyTest } from '../components/features/AstrologyTest';
-import { AstrologyResultComponent } from '../components/features/AstrologyResult';
+import { AstrologyTest } from '../modules/astrology/components/AstrologyTest';
+import { AstrologyResult as AstrologyResultComponent } from '../modules/astrology/components/AstrologyResult';
 import { Button } from '../components/ui/Button';
-import { AstrologyResult } from '../types';
+import { AstrologyResult } from '../modules/astrology/types';
 import { useAppStore } from '../stores/useAppStore';
 
 type TestState = 'test' | 'result';

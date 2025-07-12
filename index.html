@@ -3,11 +3,52 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    
+    <!-- PWA 支持 -->
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#6366f1" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="内在宇宙" />
+    
+    <!-- iOS 启动屏幕 -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <link rel="apple-touch-icon" href="/icon-192x192.png" />
+    
+    <!-- Android Chrome -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="探索你的内在宇宙：通过科学心理测评与神秘命理艺术的融合，发现真实的自己，解锁人生密码" />
+    <meta name="keywords" content="MBTI,人格测试,星座分析,血型分析,塔罗占卜,手相面相,易经占卜,心理测试,性格分析" />
+    <meta name="author" content="内在宇宙团队" />
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="内在宇宙 - Inner Cosmos" />
+    <meta property="og:description" content="探索你的内在宇宙：通过科学心理测评与神秘命理艺术的融合，发现真实的自己，解锁人生密码" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="zh_CN" />
+    
     <title>内在宇宙 - Inner Cosmos</title>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    
+    <!-- PWA Service Worker 注册 -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js')
+            .then((registration) => {
+              console.log('SW registered: ', registration);
+            })
+            .catch((registrationError) => {
+              console.log('SW registration failed: ', registrationError);
+            });
+        });
+      }
+    </script>
   </body>
 </html>

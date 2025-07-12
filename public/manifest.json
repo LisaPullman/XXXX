@@ -1,0 +1,46 @@
+{
+  "name": "内在宇宙 - Inner Cosmos",
+  "short_name": "内在宇宙",
+  "description": "探索你的内在宇宙：通过科学心理测评与神秘命理艺术的融合，发现真实的自己，解锁人生密码",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#6366f1",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "zh-CN",
+  "categories": ["lifestyle", "health", "entertainment"],
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshot-mobile.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow"
+    }
+  ],
+  "features": [
+    "MBTI人格测试",
+    "星座分析",
+    "血型分析",
+    "塔罗占卜",
+    "手相面相",
+    "易经占卜",
+    "AI大师分析",
+    "冥想练习"
+  ],
+  "prefer_related_applications": false
+}

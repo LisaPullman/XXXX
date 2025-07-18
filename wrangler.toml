@@ -3,7 +3,7 @@ compatibility_date = "2024-01-01"
 compatibility_flags = ["nodejs_compat"]
 
 [env.production]
-account_id = "YOUR_ACCOUNT_ID"
+account_id = "a87e5461cffaf741f46b7a6451142a2cad11a"
 zone_id = "YOUR_ZONE_ID"
 
 [env.production.vars]

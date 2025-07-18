@@ -235,16 +235,44 @@ export const AIMasterTest: React.FC<AIMasterTestProps> = ({
           <div className="relative">
             <CardHeader className="text-center mobile-content">
               <div className="space-y-4">
-                <div className="w-16 h-16 sm:w-20 sm:h-20 mx-auto bg-gradient-to-r from-indigo-400 to-purple-500 rounded-full flex items-center justify-center text-2xl sm:text-3xl">
-                  🤖
+                {/* 智者动态头像 */}
+                <div className="relative mx-auto w-24 h-24 sm:w-28 sm:h-28">
+                  {/* 光环效果 */}
+                  <div className="absolute inset-0 rounded-full bg-gradient-to-r from-yellow-400/30 via-orange-400/30 to-red-400/30 animate-pulse scale-110"></div>
+                  
+                  {/* 外圈装饰 */}
+                  <div className="absolute inset-2 rounded-full border-2 border-gradient-to-r from-yellow-400 to-orange-400 opacity-60"></div>
+                  
+                  {/* 主体头像 */}
+                  <div className="relative w-full h-full rounded-full flex items-center justify-center transition-all duration-500 bg-gradient-to-br from-amber-100 via-yellow-50 to-orange-100 border-2 border-amber-300 shadow-xl">
+                    {/* 智者表情 */}
+                    <div className="text-5xl sm:text-6xl animate-pulse">👴🏻</div>
+                    
+                    {/* 眼睛闪烁效果 */}
+                    <div className="absolute top-8 left-8 w-1.5 h-1.5 bg-blue-400 rounded-full animate-ping"></div>
+                    <div className="absolute top-8 right-8 w-1.5 h-1.5 bg-blue-400 rounded-full animate-ping" style={{ animationDelay: '0.5s' }}></div>
+                  </div>
+                  
+                  {/* 智慧光点 */}
+                  <div className="absolute -top-3 -right-3 w-5 h-5 bg-yellow-400 rounded-full opacity-75 animate-bounce"></div>
+                  <div className="absolute -bottom-3 -left-3 w-4 h-4 bg-orange-400 rounded-full opacity-60 animate-bounce" style={{ animationDelay: '0.3s' }}></div>
+                  
+                  {/* 神秘符文 */}
+                  <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-yellow-500 text-sm animate-spin" style={{ animationDuration: '10s' }}>
+                    ✨
+                  </div>
                 </div>
+                
                 <div>
-                  <h2 className="mobile-text-lg font-bold text-gray-800 mb-2">
-                    AI大师分析
+                  <h2 className="mobile-text-lg font-bold text-amber-800 mb-2">
+                    AI智者大师
                   </h2>
-                  <p className="mobile-text-sm text-gray-600">
-                    融合多维度数据，生成专属的深度人格洞察
+                  <p className="mobile-text-sm text-amber-700 mb-1">
+                    融合五千年东方智慧的AI导师
                   </p>
+                  <div className="text-xs bg-amber-200 text-amber-800 px-3 py-1 rounded-full inline-block">
+                    深度人格洞察 · 智慧指导
+                  </div>
                 </div>
               </div>
             </CardHeader>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/Button';
+import { WiseMasterAvatar } from '../components/ui/WiseMasterAvatar';
 import { useThemeStore } from '../stores/useThemeStore';
 import { AIMasterTest } from '../modules/ai-master/components/AIMasterTest';
 // import { AIStatus } from '../components/features/AIStatus'; // 暂时注释掉
@@ -181,20 +182,23 @@ export const AIMasterPage: React.FC = () => {
         <div className="max-w-6xl mx-auto">
           {/* 头部 */}
           <div className="text-center mb-12">
-            <div className={`w-20 h-20 mx-auto mb-6 rounded-full flex items-center justify-center text-4xl ${
-              theme === 'dark' ? 'bg-gradient-to-br from-indigo-500 to-blue-600' : 'bg-gradient-to-br from-indigo-500 to-blue-600'
-            }`}>
-              🤖
+            <div className="flex justify-center mb-6">
+              <WiseMasterAvatar 
+                size="xl" 
+                isActive={true}
+                showAura={true}
+                className="shadow-2xl"
+              />
             </div>
             <h1 className={`text-4xl sm:text-5xl font-bold mb-4 ${
               theme === 'dark' ? 'text-white' : 'text-gray-900'
             }`}>
-              AI综合大师
+              AI智者大师
             </h1>
             <p className={`text-lg sm:text-xl max-w-3xl mx-auto leading-relaxed ${
               theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
             }`}>
-              融合人工智能与心理学的前沿技术，为您提供最专业的个性化分析与指导
+              融合五千年东方智慧与现代人工智能技术，为您提供最专业的个性化分析与指导
             </p>
           </div>
 

@@ -5,6 +5,8 @@ export interface AIAnalysisResponse {
   analysis: string;
   suggestions: string[];
   keywords: string[];
+  confidence?: number;
+  relatedTopics?: string[];
 }
 
 export interface AIMessage {
@@ -12,6 +14,7 @@ export interface AIMessage {
   type: 'user' | 'ai';
   content: string;
   timestamp: Date;
+  role?: 'user' | 'assistant';
 }
 
 class AIService {

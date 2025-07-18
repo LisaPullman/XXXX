@@ -8,7 +8,7 @@ interface PWAPromptProps {
 
 export const PWAPrompt: React.FC<PWAPromptProps> = ({ className }) => {
   const { 
-    isInstallable, 
+    isInstallable: _isInstallable,
     isInstalled, 
     installPWA, 
     showInstallPrompt, 
@@ -171,7 +171,7 @@ interface PWABannerProps {
 }
 
 export const PWABanner: React.FC<PWABannerProps> = ({ className }) => {
-  const { isInstalled, isOffline } = usePWA();
+  const { isInstalled, isOffline: _isOffline } = usePWA();
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {

@@ -34,7 +34,7 @@ const socialPlatforms: SocialPlatform[] = [
     name: '微信',
     icon: '💬',
     color: 'bg-green-500 hover:bg-green-600',
-    shareUrl: (data) => {
+    shareUrl: (_data) => {
       // 微信分享需要特殊处理，通常通过 JS SDK
       return `javascript:void(0)`;
     },
@@ -69,7 +69,7 @@ const socialPlatforms: SocialPlatform[] = [
     name: '抖音',
     icon: '🎵',
     color: 'bg-black hover:bg-gray-800',
-    shareUrl: (data) => {
+    shareUrl: (_data) => {
       // 抖音分享通常需要 App 调用
       return `javascript:void(0)`;
     },
@@ -80,7 +80,7 @@ const socialPlatforms: SocialPlatform[] = [
     name: '小红书',
     icon: '📕',
     color: 'bg-red-400 hover:bg-red-500',
-    shareUrl: (data) => {
+    shareUrl: (_data) => {
       // 小红书分享需要特殊处理
       return `javascript:void(0)`;
     },

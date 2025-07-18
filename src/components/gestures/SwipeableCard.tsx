@@ -40,7 +40,7 @@ export const SwipeableCard: React.FC<SwipeableCardProps> = ({
   rightAction
 }) => {
   const [swipeOffset, setSwipeOffset] = useState(0);
-  const [isRevealed, setIsRevealed] = useState(false);
+  const [_isRevealed, setIsRevealed] = useState(false);
   const [actionTriggered, setActionTriggered] = useState<'left' | 'right' | null>(null);
   const cardRef = useRef<HTMLDivElement>(null);
 
@@ -93,6 +93,8 @@ export const SwipeableCard: React.FC<SwipeableCardProps> = ({
     maxSwipeTime: 500,
   });
 
+  const { style: gestureStyle, ...otherGestureProps } = gestureProps;
+
   return (
     <div className={cn('relative overflow-hidden', className)}>
       {/* 左侧动作背景 */}
@@ -138,11 +140,12 @@ export const SwipeableCard: React.FC<SwipeableCardProps> = ({
           actionTriggered && 'scale-95'
         )}
         style={{
-          transform: enableSwipeToAction 
-            ? `translateX(${swipeOffset}px)` 
+          ...gestureStyle,
+          transform: enableSwipeToAction
+            ? `translateX(${swipeOffset}px)`
             : 'translateX(0)'
         }}
-        {...gestureProps}
+        {...otherGestureProps}
       >
         {children}
       </div>
@@ -166,7 +169,7 @@ export const GestureResultCard: React.FC<{
   onRetake,
   className
 }) => {
-  const [hintVisible, setHintVisible] = useState(false);
+  const [_hintVisible, _setHintVisible] = useState(false);
 
   const showHint = (message: string) => {
     // 可以实现提示功能

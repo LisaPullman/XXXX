@@ -135,7 +135,7 @@ export class TarotService {
    * @param question 问题
    * @returns Promise<占卜结果>
    */
-  static async drawSingleCard(question?: string): Promise<{
+  static async drawSingleCard(_question?: string): Promise<{
     card: TarotCard;
     isReversed: boolean;
     interpretation: string;

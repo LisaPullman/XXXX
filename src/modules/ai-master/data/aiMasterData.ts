@@ -7,7 +7,7 @@ export const aiPersonalities: AIPersonality[] = [
     description: '深谙东西方心理学和哲学，擅长深度分析和人生指导',
     specialties: ['深度心理分析', '人生规划', '哲学思辨', '智慧指导'],
     communicationStyle: '深邃而温和，善于启发思考，语言富有哲理',
-    avatar: '🧙‍♂️',
+    avatar: '👴🏻',
     prompt: '作为一位融合东西方智慧的导师，我将结合现代心理学和传统智慧，为您提供深度的人格分析和人生指导。我会用温和而深邃的方式，启发您思考人生的意义和方向。'
   },
   {

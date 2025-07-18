@@ -1,12 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/Button';
+import { WiseMasterAvatar } from '../components/ui/WiseMasterAvatar';
 import { useThemeStore } from '../stores/useThemeStore';
 
 export const IChingPage: React.FC = () => {
   const navigate = useNavigate();
   const { theme } = useThemeStore();
   const [selectedQuestion, setSelectedQuestion] = useState<string | null>(null);
+  const [baguaRotation, setBaguaRotation] = useState(0);
+
+  // 八卦图旋转动画
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setBaguaRotation(prev => (prev + 1) % 360);
+    }, 100);
+    return () => clearInterval(interval);
+  }, []);
 
   const questionTypes = [
     { id: 'general', name: '综合运势', description: '整体运势和发展方向', icon: '🌟' },
@@ -123,224 +133,217 @@ export const IChingPage: React.FC = () => {
   ];
 
   return (
-    <div className={`min-h-screen transition-colors duration-300 ${
+    <div className={`min-h-screen transition-colors duration-300 relative overflow-hidden ${
       theme === 'dark'
-        ? 'bg-gradient-to-br from-slate-900 via-gray-900 to-slate-900'
-        : 'bg-gradient-to-br from-gray-50 via-slate-50 to-gray-100'
+        ? 'bg-gradient-to-br from-amber-900 via-orange-900 to-red-900'
+        : 'bg-gradient-to-br from-amber-50 via-orange-50 to-yellow-50'
     }`}>
-      <div className="px-4 sm:px-6 lg:px-8 py-8">
+      {/* 八卦图背景 */}
+      <div className="absolute inset-0 flex items-center justify-center opacity-10">
+        <div
+          className="w-96 h-96 transform transition-transform duration-100"
+          style={{ transform: `rotate(${baguaRotation}deg)` }}
+        >
+          <svg viewBox="0 0 400 400" className="w-full h-full">
+            {/* 外圆 */}
+            <circle cx="200" cy="200" r="190" fill="none" stroke="currentColor" strokeWidth="2"/>
+
+            {/* 太极图 */}
+            <circle cx="200" cy="200" r="60" fill="currentColor"/>
+            <path d="M 200 140 A 30 30 0 0 1 200 200 A 30 30 0 0 0 200 260 A 60 60 0 0 1 200 140" fill="white"/>
+            <circle cx="200" cy="170" r="15" fill="white"/>
+            <circle cx="200" cy="230" r="15" fill="currentColor"/>
+
+            {/* 八卦符号 */}
+            {[0, 45, 90, 135, 180, 225, 270, 315].map((angle, index) => {
+              const trigrams = ['☰', '☱', '☲', '☳', '☴', '☵', '☶', '☷'];
+              const x = 200 + 130 * Math.cos((angle - 90) * Math.PI / 180);
+              const y = 200 + 130 * Math.sin((angle - 90) * Math.PI / 180);
+              return (
+                <text
+                  key={index}
+                  x={x}
+                  y={y}
+                  textAnchor="middle"
+                  dominantBaseline="middle"
+                  fontSize="24"
+                  fill="currentColor"
+                >
+                  {trigrams[index]}
+                </text>
+              );
+            })}
+          </svg>
+        </div>
+      </div>
+
+      <div className="relative z-10 px-4 sm:px-6 lg:px-8 py-8">
         <div className="max-w-6xl mx-auto">
           {/* 头部 */}
           <div className="text-center mb-12">
-            <div className={`w-20 h-20 mx-auto mb-6 rounded-full flex items-center justify-center text-4xl ${
-              theme === 'dark' ? 'bg-gradient-to-br from-gray-600 to-gray-800' : 'bg-gradient-to-br from-gray-600 to-gray-800'
-            }`}>
+            <div className={`w-24 h-24 mx-auto mb-6 rounded-full flex items-center justify-center text-5xl ${
+              theme === 'dark' ? 'bg-gradient-to-br from-amber-600 to-orange-700' : 'bg-gradient-to-br from-amber-400 to-orange-500'
+            } shadow-2xl`}>
               ☯️
             </div>
             <h1 className={`text-4xl sm:text-5xl font-bold mb-4 ${
-              theme === 'dark' ? 'text-white' : 'text-gray-900'
+              theme === 'dark' ? 'text-amber-100' : 'text-amber-900'
             }`}>
-              易经八卦占卜
+              易经八卦
             </h1>
             <p className={`text-lg sm:text-xl max-w-3xl mx-auto leading-relaxed ${
-              theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+              theme === 'dark' ? 'text-amber-200' : 'text-amber-700'
             }`}>
-              运用五千年易经智慧，通过八卦占卜为人生困惑指点迷津
+              探索五千年易经智慧，通过AI算运与古典知识指引人生方向
             </p>
           </div>
 
-          {/* 问题类型选择 */}
+          {/* 主要功能模块 */}
+          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto mb-12">
+            {/* AI算运模块 */}
+            <div
+              className={`group relative rounded-2xl p-8 cursor-pointer transform hover:scale-105 transition-all duration-300 ${
+                theme === 'dark'
+                  ? 'bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20'
+                  : 'bg-white/80 backdrop-blur-sm shadow-xl hover:shadow-2xl'
+              }`}
+              onClick={() => navigate('/bagua/ai-divination')}
+            >
+              <div className="text-center">
+                <div className="flex justify-center mb-6">
+                  <WiseMasterAvatar 
+                    size="lg" 
+                    isActive={true}
+                    showAura={true}
+                    className="group-hover:scale-110 transition-transform duration-300"
+                  />
+                </div>
+                <h2 className={`text-2xl font-bold mb-4 ${
+                  theme === 'dark' ? 'text-amber-100' : 'text-amber-900'
+                }`}>
+                  AI算运
+                </h2>
+                <p className={`mb-6 leading-relaxed ${
+                  theme === 'dark' ? 'text-amber-200' : 'text-amber-700'
+                }`}>
+                  与AI智者对话，通过古老的易经智慧为您解答人生疑惑，预测运势走向
+                </p>
+                <div className="flex justify-center space-x-4 text-sm">
+                  <span className={`px-3 py-1 rounded-full ${
+                    theme === 'dark' ? 'bg-amber-500/20 text-amber-300' : 'bg-amber-100 text-amber-600'
+                  }`}>
+                    • 智者对话
+                  </span>
+                  <span className={`px-3 py-1 rounded-full ${
+                    theme === 'dark' ? 'bg-amber-500/20 text-amber-300' : 'bg-amber-100 text-amber-600'
+                  }`}>
+                    • 运势预测
+                  </span>
+                  <span className={`px-3 py-1 rounded-full ${
+                    theme === 'dark' ? 'bg-amber-500/20 text-amber-300' : 'bg-amber-100 text-amber-600'
+                  }`}>
+                    • 结果分享
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* 八卦知识模块 */}
+            <div
+              className={`group relative rounded-2xl p-8 cursor-pointer transform hover:scale-105 transition-all duration-300 ${
+                theme === 'dark'
+                  ? 'bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20'
+                  : 'bg-white/80 backdrop-blur-sm shadow-xl hover:shadow-2xl'
+              }`}
+              onClick={() => navigate('/bagua/knowledge')}
+            >
+              <div className="text-center">
+                <div className={`w-20 h-20 mx-auto mb-6 rounded-full flex items-center justify-center text-3xl ${
+                  theme === 'dark'
+                    ? 'bg-gradient-to-br from-blue-500 to-purple-600'
+                    : 'bg-gradient-to-br from-blue-400 to-purple-500'
+                } shadow-lg group-hover:shadow-xl transition-shadow`}>
+                  📚
+                </div>
+                <h2 className={`text-2xl font-bold mb-4 ${
+                  theme === 'dark' ? 'text-amber-100' : 'text-amber-900'
+                }`}>
+                  八卦知识
+                </h2>
+                <p className={`mb-6 leading-relaxed ${
+                  theme === 'dark' ? 'text-amber-200' : 'text-amber-700'
+                }`}>
+                  深入学习易经八卦的奥秘，了解64卦的含义，掌握古代智慧的精髓
+                </p>
+                <div className="flex justify-center space-x-4 text-sm">
+                  <span className={`px-3 py-1 rounded-full ${
+                    theme === 'dark' ? 'bg-blue-500/20 text-blue-300' : 'bg-blue-100 text-blue-600'
+                  }`}>
+                    • 64卦详解
+                  </span>
+                  <span className={`px-3 py-1 rounded-full ${
+                    theme === 'dark' ? 'bg-blue-500/20 text-blue-300' : 'bg-blue-100 text-blue-600'
+                  }`}>
+                    • 智慧语录
+                  </span>
+                  <span className={`px-3 py-1 rounded-full ${
+                    theme === 'dark' ? 'bg-blue-500/20 text-blue-300' : 'bg-blue-100 text-blue-600'
+                  }`}>
+                    • 现代应用
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* 易经智慧介绍 */}
           <div className={`rounded-2xl p-6 sm:p-8 mb-12 ${
             theme === 'dark' ? 'bg-white/10 backdrop-blur-sm border border-white/20' : 'bg-white/80 backdrop-blur-sm shadow-xl'
           }`}>
             <h2 className={`text-2xl sm:text-3xl font-bold text-center mb-8 ${
-              theme === 'dark' ? 'text-white' : 'text-gray-900'
-            }`}>
-              选择占卜问题
-            </h2>
-
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-6 mb-8">
-              {questionTypes.map((type) => (
-                <div
-                  key={type.id}
-                  onClick={() => setSelectedQuestion(type.id)}
-                  className={`rounded-xl p-6 text-center cursor-pointer transition-all duration-300 hover:scale-105 ${
-                    selectedQuestion === type.id
-                      ? theme === 'dark'
-                        ? 'bg-gradient-to-br from-gray-600 to-gray-800 text-white'
-                        : 'bg-gradient-to-br from-gray-600 to-gray-800 text-white'
-                      : theme === 'dark'
-                        ? 'bg-white/10 hover:bg-white/20 text-white border border-white/20'
-                        : 'bg-white hover:bg-gray-50 text-gray-800 shadow-lg'
-                  }`}
-                >
-                  <div className="text-3xl mb-3">{type.icon}</div>
-                  <h3 className="font-bold text-lg mb-2">{type.name}</h3>
-                  <p className="text-sm opacity-90">{type.description}</p>
-                </div>
-              ))}
-            </div>
-
-            <div className="text-center">
-              <Button
-                size="lg"
-                disabled={!selectedQuestion}
-                className={`bg-gradient-to-r from-gray-600 to-gray-800 hover:from-gray-700 hover:to-gray-900 text-white px-8 py-4 text-lg font-semibold rounded-full shadow-xl hover:shadow-gray-500/25 transform hover:-translate-y-1 transition-all duration-300 ${
-                  !selectedQuestion && 'opacity-50 cursor-not-allowed'
-                }`}
-              >
-                开始占卜
-              </Button>
-              <p className={`text-sm mt-3 ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-                {selectedQuestion ? '静心思考，准备接受易经指引' : '请先选择要占卜的问题类型'}
-              </p>
-            </div>
-          </div>
-
-          {/* 八卦介绍 */}
-          <div className="mb-12">
-            <h2 className={`text-2xl sm:text-3xl font-bold text-center mb-8 ${
-              theme === 'dark' ? 'text-white' : 'text-gray-900'
-            }`}>
-              八卦基础知识
-            </h2>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
-              {eightTrigrams.map((trigram, index) => (
-                <div key={index} className={`rounded-xl p-6 text-center transition-all duration-300 hover:scale-105 ${
-                  theme === 'dark' ? 'bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20' : 'bg-white/80 backdrop-blur-sm shadow-lg hover:shadow-xl'
-                }`}>
-                  <div className="text-4xl mb-3">{trigram.symbol}</div>
-                  <h3 className={`font-bold text-lg mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                    {trigram.name}
-                  </h3>
-                  <p className={`text-sm mb-3 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
-                    {trigram.element} · {trigram.nature}
-                  </p>
-                  <p className={`text-xs mb-3 leading-relaxed ${theme === 'dark' ? 'text-gray-400' : 'text-gray-500'}`}>
-                    {trigram.description}
-                  </p>
-                  <div className="flex flex-wrap gap-1 justify-center">
-                    {trigram.keywords.map((keyword, idx) => (
-                      <span key={idx} className={`text-xs px-2 py-1 rounded-full ${
-                        theme === 'dark' ? 'bg-white/20 text-gray-300' : 'bg-gray-100 text-gray-600'
-                      }`}>
-                        {keyword}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* 占卜方法 */}
-          <div className="mb-12">
-            <h2 className={`text-2xl sm:text-3xl font-bold text-center mb-8 ${
-              theme === 'dark' ? 'text-white' : 'text-gray-900'
-            }`}>
-              占卜方法
-            </h2>
-            <div className="grid sm:grid-cols-3 gap-6">
-              {divinationMethods.map((method, index) => (
-                <div key={index} className={`rounded-xl p-6 ${
-                  theme === 'dark' ? 'bg-white/10 backdrop-blur-sm border border-white/20' : 'bg-white/80 backdrop-blur-sm shadow-lg'
-                }`}>
-                  <div className="text-center mb-4">
-                    <div className="text-4xl mb-3">{method.icon}</div>
-                    <h3 className={`font-bold text-lg mb-2 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
-                      {method.name}
-                    </h3>
-                    <p className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
-                      {method.description}
-                    </p>
-                  </div>
-
-                  <div className="space-y-3 mb-4">
-                    {method.steps.map((step, idx) => (
-                      <div key={idx} className={`flex items-center text-sm ${
-                        theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
-                      }`}>
-                        <div className={`w-6 h-6 mr-3 rounded-full flex items-center justify-center text-xs font-bold ${
-                          theme === 'dark' ? 'bg-gray-600 text-white' : 'bg-gray-200 text-gray-700'
-                        }`}>
-                          {idx + 1}
-                        </div>
-                        {step}
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="flex justify-between text-xs">
-                    <span className={`px-2 py-1 rounded ${
-                      theme === 'dark' ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-100 text-blue-600'
-                    }`}>
-                      {method.time}
-                    </span>
-                    <span className={`px-2 py-1 rounded ${
-                      method.difficulty === '简单'
-                        ? theme === 'dark' ? 'bg-green-500/20 text-green-400' : 'bg-green-100 text-green-600'
-                        : theme === 'dark' ? 'bg-orange-500/20 text-orange-400' : 'bg-orange-100 text-orange-600'
-                    }`}>
-                      {method.difficulty}
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* 易经智慧 */}
-          <div className="mb-12">
-            <h2 className={`text-2xl sm:text-3xl font-bold text-center mb-8 ${
-              theme === 'dark' ? 'text-white' : 'text-gray-900'
+              theme === 'dark' ? 'text-amber-100' : 'text-amber-900'
             }`}>
               易经智慧
             </h2>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              <div className={`rounded-xl p-6 ${
-                theme === 'dark' ? 'bg-white/10 backdrop-blur-sm border border-white/20' : 'bg-white/80 backdrop-blur-sm shadow-lg'
-              }`}>
-                <div className={`w-12 h-12 mb-4 rounded-full flex items-center justify-center text-xl ${
+            <div className="grid sm:grid-cols-3 gap-6">
+              <div className="text-center">
+                <div className={`w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center text-2xl ${
                   theme === 'dark' ? 'bg-yellow-500/20 text-yellow-400' : 'bg-yellow-100 text-yellow-600'
                 }`}>
                   📖
                 </div>
-                <h3 className={`text-lg font-bold mb-3 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+                <h3 className={`text-lg font-bold mb-3 ${theme === 'dark' ? 'text-amber-100' : 'text-amber-900'}`}>
                   群经之首
                 </h3>
-                <p className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
+                <p className={`text-sm ${theme === 'dark' ? 'text-amber-200' : 'text-amber-700'}`}>
                   易经被誉为"群经之首"，是中华文化的源头活水，包含着深刻的哲学思想和人生智慧。
                 </p>
               </div>
 
-              <div className={`rounded-xl p-6 ${
-                theme === 'dark' ? 'bg-white/10 backdrop-blur-sm border border-white/20' : 'bg-white/80 backdrop-blur-sm shadow-lg'
-              }`}>
-                <div className={`w-12 h-12 mb-4 rounded-full flex items-center justify-center text-xl ${
+              <div className="text-center">
+                <div className={`w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center text-2xl ${
                   theme === 'dark' ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-100 text-blue-600'
                 }`}>
                   ⚖️
                 </div>
-                <h3 className={`text-lg font-bold mb-3 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+                <h3 className={`text-lg font-bold mb-3 ${theme === 'dark' ? 'text-amber-100' : 'text-amber-900'}`}>
                   阴阳平衡
                 </h3>
-                <p className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
+                <p className={`text-sm ${theme === 'dark' ? 'text-amber-200' : 'text-amber-700'}`}>
                   易经强调阴阳平衡的重要性，教导我们在变化中寻找平衡，在对立中寻求统一。
                 </p>
               </div>
 
-              <div className={`rounded-xl p-6 ${
-                theme === 'dark' ? 'bg-white/10 backdrop-blur-sm border border-white/20' : 'bg-white/80 backdrop-blur-sm shadow-lg'
-              }`}>
-                <div className={`w-12 h-12 mb-4 rounded-full flex items-center justify-center text-xl ${
+              <div className="text-center">
+                <div className={`w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center text-2xl ${
                   theme === 'dark' ? 'bg-green-500/20 text-green-400' : 'bg-green-100 text-green-600'
                 }`}>
                   🔄
                 </div>
-                <h3 className={`text-lg font-bold mb-3 ${theme === 'dark' ? 'text-white' : 'text-gray-900'}`}>
+                <h3 className={`text-lg font-bold mb-3 ${theme === 'dark' ? 'text-amber-100' : 'text-amber-900'}`}>
                   变化之道
                 </h3>
-                <p className={`text-sm ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}>
+                <p className={`text-sm ${theme === 'dark' ? 'text-amber-200' : 'text-amber-700'}`}>
                   "易"即变化，易经揭示了万物变化的规律，指导我们如何在变化中把握机遇。
                 </p>
               </div>
@@ -354,8 +357,8 @@ export const IChingPage: React.FC = () => {
               onClick={() => navigate('/')}
               className={`${
                 theme === 'dark'
-                  ? 'border-white/20 text-white hover:bg-white/10'
-                  : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+                  ? 'border-amber-300/30 text-amber-200 hover:bg-amber-500/10'
+                  : 'border-amber-600 text-amber-700 hover:bg-amber-50'
               }`}
             >
               ← 返回首页

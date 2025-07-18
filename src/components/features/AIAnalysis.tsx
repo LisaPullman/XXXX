@@ -48,19 +48,36 @@ export const AIAnalysis: React.FC<AIAnalysisProps> = ({
       <Card className={cn('', className)}>
         <CardContent className="p-8 text-center">
           <div className="space-y-4">
-            <div className="w-16 h-16 mx-auto bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center animate-pulse">
-              <span className="text-white font-bold text-xl">AI</span>
+            {/* 智者思考动画 */}
+            <div className="relative mx-auto w-20 h-20">
+              {/* 光环效果 */}
+              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-yellow-400/30 via-orange-400/30 to-red-400/30 animate-pulse scale-110"></div>
+              
+              {/* 主体头像 */}
+              <div className="relative w-full h-full rounded-full flex items-center justify-center transition-all duration-500 bg-gradient-to-br from-amber-100 via-yellow-50 to-orange-100 border-2 border-amber-300 shadow-xl">
+                {/* 智者表情 */}
+                <div className="text-4xl animate-pulse">👴🏻</div>
+                
+                {/* 眼睛闪烁效果 */}
+                <div className="absolute top-6 left-6 w-1.5 h-1.5 bg-blue-400 rounded-full animate-ping"></div>
+                <div className="absolute top-6 right-6 w-1.5 h-1.5 bg-blue-400 rounded-full animate-ping" style={{ animationDelay: '0.5s' }}></div>
+              </div>
+              
+              {/* 智慧光点 */}
+              <div className="absolute -top-2 -right-2 w-4 h-4 bg-yellow-400 rounded-full opacity-75 animate-bounce"></div>
+              <div className="absolute -bottom-2 -left-2 w-3 h-3 bg-orange-400 rounded-full opacity-60 animate-bounce" style={{ animationDelay: '0.3s' }}></div>
             </div>
+            
             <div className="space-y-2">
-              <h3 className="text-lg font-semibold">AI正在分析中...</h3>
-              <p className="text-gray-600">
-                正在基于你的MBTI结果生成个性化深度分析
+              <h3 className="text-lg font-semibold text-amber-800">智者正在深思...</h3>
+              <p className="text-amber-700">
+                正在运用五千年智慧分析您的性格特质
               </p>
             </div>
             <div className="flex justify-center space-x-1">
-              <div className="w-2 h-2 bg-primary-500 rounded-full animate-bounce"></div>
-              <div className="w-2 h-2 bg-primary-500 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-              <div className="w-2 h-2 bg-primary-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+              <div className="w-2 h-2 bg-amber-500 rounded-full animate-bounce"></div>
+              <div className="w-2 h-2 bg-amber-500 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+              <div className="w-2 h-2 bg-amber-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
             </div>
           </div>
         </CardContent>
@@ -102,18 +119,34 @@ export const AIAnalysis: React.FC<AIAnalysisProps> = ({
         <CardHeader>
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <div className="w-12 h-12 bg-gradient-to-r from-secondary-500 to-accent-500 rounded-full flex items-center justify-center">
-                <span className="text-white font-bold">AI</span>
+              {/* 智者头像 */}
+              <div className="relative w-16 h-16">
+                {/* 光环效果 */}
+                <div className="absolute inset-0 rounded-full bg-gradient-to-r from-yellow-400/20 via-orange-400/20 to-red-400/20 animate-pulse scale-110"></div>
+                
+                {/* 主体头像 */}
+                <div className="relative w-full h-full rounded-full flex items-center justify-center bg-gradient-to-br from-amber-100 via-yellow-50 to-orange-100 border-2 border-amber-300 shadow-lg">
+                  {/* 智者表情 */}
+                  <div className="text-2xl">👴🏻</div>
+                  
+                  {/* 眼睛闪烁效果 */}
+                  <div className="absolute top-4 left-4 w-1 h-1 bg-blue-400 rounded-full animate-ping"></div>
+                  <div className="absolute top-4 right-4 w-1 h-1 bg-blue-400 rounded-full animate-ping" style={{ animationDelay: '0.5s' }}></div>
+                </div>
+                
+                {/* 智慧光点 */}
+                <div className="absolute -top-1 -right-1 w-3 h-3 bg-yellow-400 rounded-full opacity-75 animate-bounce"></div>
               </div>
+              
               <div>
-                <h3 className="text-xl font-semibold">AI深度解读</h3>
-                <p className="text-sm text-gray-600">
-                  基于你的{mbtiResult.type}人格类型 · 置信度 {Math.round(analysis.confidence * 100)}%
+                <h3 className="text-xl font-semibold text-amber-800">智者深度解读</h3>
+                <p className="text-sm text-amber-700">
+                  基于您的{mbtiResult.type}人格类型 · 智慧置信度 {Math.round((analysis.confidence || 0.8) * 100)}%
                 </p>
               </div>
             </div>
-            <Button variant="ghost" size="sm" onClick={handleRegenerate}>
-              重新生成
+            <Button variant="ghost" size="sm" onClick={handleRegenerate} className="text-amber-600 hover:text-amber-800">
+              重新解读
             </Button>
           </div>
         </CardHeader>
@@ -170,7 +203,7 @@ export const AIAnalysis: React.FC<AIAnalysisProps> = ({
       </Card>
 
       {/* 建议和相关话题 */}
-      {(analysis.suggestions.length > 0 || analysis.relatedTopics.length > 0) && (
+      {(analysis.suggestions.length > 0 || (analysis.relatedTopics && analysis.relatedTopics.length > 0)) && (
         <div className="grid md:grid-cols-2 gap-6">
           {/* 个性化建议 */}
           {analysis.suggestions.length > 0 && (
@@ -194,14 +227,14 @@ export const AIAnalysis: React.FC<AIAnalysisProps> = ({
           )}
 
           {/* 相关话题 */}
-          {analysis.relatedTopics.length > 0 && (
+          {analysis.relatedTopics && analysis.relatedTopics.length > 0 && (
             <Card>
               <CardHeader>
                 <h4 className="text-lg font-semibold text-blue-700">🔗 相关话题</h4>
               </CardHeader>
               <CardContent>
                 <div className="flex flex-wrap gap-2">
-                  {analysis.relatedTopics.map((topic, index) => (
+                  {analysis.relatedTopics?.map((topic, index) => (
                     <span 
                       key={index}
                       className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm cursor-pointer hover:bg-blue-200 transition-colors"

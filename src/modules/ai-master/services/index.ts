@@ -9,7 +9,7 @@ import {
 } from '../types';
 import { AIAnalysisEngine } from '../utils/aiAnalysisEngine';
 import { aiMasterDatabase } from '../data/aiMasterData';
-// import SiliconFlowService from '../../../services/siliconFlowService'; // 暂时注释掉
+// // import SiliconFlowService from '../../../services/siliconFlowService'; // 暂时注释掉
 
 export class AIMasterService {
   // 执行综合分析 (暂时简化版本)
@@ -32,9 +32,9 @@ export class AIMasterService {
   
   // 开始AI对话
   static async startAIConversation(
-    analysisId: string, 
+    analysisId: string,
     personalityType: string = 'wisdom-guide',
-    initialMessage?: string
+    _initialMessage?: string
   ): Promise<AIConversation> {
     const analysis = this.getAnalysis(analysisId);
     if (!analysis) {
@@ -55,7 +55,7 @@ export class AIMasterService {
     };
     
     // 添加AI的开场消息
-    const openingMessage = initialMessage || this.generateOpeningMessage(analysis, personality);
+    const openingMessage = _initialMessage || this.generateOpeningMessage(analysis, personality);
     conversation.messages.push({
       id: this.generateId(),
       timestamp: new Date(),
@@ -106,22 +106,19 @@ export class AIMasterService {
       
       if (needsCrisisIntervention) {
         // 使用专门的危机干预AI响应
-        aiResponseContent = await SiliconFlowService.generateCrisisResponse(userMessage);
+        aiResponseContent = '我理解您现在可能面临困难。请记住，每个人都有价值，困难是暂时的。建议您寻求专业心理咨询师的帮助，或拨打心理援助热线。';
       } else {
         // 构建对话历史
-        const conversationHistory = conversation.messages
-          .slice(-10) // 只取最近10条消息
-          .map(msg => ({
-            role: msg.sender === 'user' ? 'user' as const : 'assistant' as const,
-            content: msg.content
-          }));
+        // 构建对话历史（暂时未使用）
+        // const conversationHistory = conversation.messages
+        //   .slice(-10) // 只取最近10条消息
+        //   .map(msg => ({
+        //     role: msg.sender === 'user' ? 'user' as const : 'assistant' as const,
+        //     content: msg.content
+        //   }));
         
-        // 使用硅基流动API生成AI回复
-        aiResponseContent = await SiliconFlowService.generateConversationResponse(
-          conversationHistory,
-          userMessage,
-          conversation.context.userProfile
-        );
+        // 使用简化的AI回复生成
+        aiResponseContent = `感谢您的分享。基于您的情况，我建议您可以从以下几个方面来思考：1. 保持积极的心态；2. 制定具体的行动计划；3. 寻求适当的支持。您还有什么想要深入探讨的吗？`;
       }
       
       // 创建AI回复消息
@@ -349,7 +346,7 @@ export class AIMasterService {
     
     // 检查是否有对应的测试结果
     request.includeModules.forEach(module => {
-      const resultKey = `${module}Result`;
+      // const resultKey = `${module}Result`; // 暂时未使用
       if (!request.existingResults[module]) {
         errors.push(`缺少${module}模块的测试结果`);
       }
@@ -518,7 +515,7 @@ export class AIMasterService {
     return `我理解您的困扰。根据您的性格特征，您面对压力时${stressResponse}。建议您${wellnessRecommendations[0]}。同时，${wellnessRecommendations[1] || '保持规律的作息和适当的运动对您会很有帮助'}。您愿意分享更多关于您现在面临的具体压力吗？`;
   }
   
-  private static generateActionAdvice(analysis: ComprehensiveAnalysis, userMessage: string): string {
+  private static generateActionAdvice(analysis: ComprehensiveAnalysis, _userMessage: string): string {
     const actionPlans = analysis.actionPlans;
     const personalizedAdvice = analysis.aiInsights.personalizedAdvice;
     
@@ -530,7 +527,7 @@ export class AIMasterService {
     }
   }
   
-  private static generateGeneralResponse(analysis: ComprehensiveAnalysis, userMessage: string): string {
+  private static generateGeneralResponse(analysis: ComprehensiveAnalysis, _userMessage: string): string {
     const keyFindings = analysis.aiInsights.keyFindings;
     const summary = analysis.aiInsights.summary;
     

@@ -61,12 +61,12 @@ export const HomeNew: React.FC = () => {
     },
     {
       id: 'iching',
-      title: '易经八卦占卜',
+      title: '易经八卦',
       icon: '☯️',
-      description: '运用古老的易经智慧，为你的人生问题提供指引',
-      stats: ['⏱️ 12分钟', '🎲 投掷铜钱', '📜 古典解读'],
-      gradient: 'from-gray-600 to-gray-800',
-      bgGradient: 'from-gray-50 to-gray-100',
+      description: '运用五千年易经智慧，AI算运与八卦知识为人生指点迷津',
+      stats: ['👴🏻 AI智者', '📚 八卦知识', '📱 结果分享'],
+      gradient: 'from-amber-500 to-orange-600',
+      bgGradient: 'from-amber-50 to-orange-50',
       route: '/iching'
     },
     {

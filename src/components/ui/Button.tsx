@@ -2,7 +2,7 @@ import React from 'react';
 import { cn } from '../../utils/cn';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'mystic' | 'gradient';
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'mystic' | 'gradient' | 'default';
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
   loading?: boolean;
   fullWidth?: boolean;
@@ -28,6 +28,7 @@ export const Button: React.FC<ButtonProps> = ({
     ghost: 'text-gray-600 hover:bg-gray-100 focus:ring-gray-500 hover:text-gray-800',
     mystic: 'bg-gradient-to-r from-secondary-600 via-accent-600 to-primary-600 text-white hover:opacity-90 focus:ring-purple-500 shadow-xl hover:shadow-2xl transform hover:-translate-y-1',
     gradient: 'bg-gradient-to-r from-primary-500 to-secondary-500 text-white hover:from-primary-600 hover:to-secondary-600 focus:ring-primary-500 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5',
+    default: 'bg-gray-600 hover:bg-gray-700 text-white focus:ring-gray-500 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5',
   };
   
   const responsiveSizes = {

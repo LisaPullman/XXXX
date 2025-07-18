@@ -58,10 +58,10 @@ export const useOrientation = () => {
     };
   }, []);
 
-  const lockOrientation = async (lockType: OrientationLockType) => {
+  const lockOrientation = async (lockType: OrientationType) => {
     try {
-      if (screen.orientation && screen.orientation.lock) {
-        await screen.orientation.lock(lockType);
+      if (screen.orientation && (screen.orientation as any).lock) {
+        await (screen.orientation as any).lock(lockType);
         return true;
       }
       return false;

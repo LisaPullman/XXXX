@@ -54,7 +54,7 @@ export const OrientationIndicator: React.FC<OrientationIndicatorProps> = ({
   className,
   showAngle = false
 }) => {
-  const { isLandscape, isPortrait, angle, type } = useOrientation();
+  const { isLandscape, isPortrait: _isPortrait, angle, type: _type } = useOrientation();
 
   return (
     <div className={cn(

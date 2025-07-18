@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback } from 'react';
 
 export interface GestureConfig {
   minSwipeDistance?: number;
@@ -18,9 +18,9 @@ export interface GestureHandlers {
   onSwipeRight?: (gesture: SwipeDirection) => void;
   onSwipeUp?: (gesture: SwipeDirection) => void;
   onSwipeDown?: (gesture: SwipeDirection) => void;
-  onTap?: (event: Touch) => void;
-  onLongPress?: (event: Touch) => void;
-  onPinch?: (scale: number, event: TouchEvent) => void;
+  onTap?: (event: React.Touch) => void;
+  onLongPress?: (event: React.Touch) => void;
+  onPinch?: (scale: number, event: React.TouchEvent) => void;
 }
 
 const defaultConfig: GestureConfig = {
@@ -34,25 +34,25 @@ export const useGestures = (
   config: GestureConfig = {}
 ) => {
   const mergedConfig = { ...defaultConfig, ...config };
-  const touchStartRef = useRef<Touch | null>(null);
+  const touchStartRef = useRef<React.Touch | null>(null);
   const touchStartTimeRef = useRef<number>(0);
   const longPressTimerRef = useRef<NodeJS.Timeout | null>(null);
   const initialPinchDistance = useRef<number>(0);
   const [isGestureActive, setIsGestureActive] = useState(false);
 
-  const calculateDistance = useCallback((touch1: Touch, touch2: Touch): number => {
+  const calculateDistance = useCallback((touch1: React.Touch, touch2: React.Touch): number => {
     return Math.sqrt(
       Math.pow(touch2.clientX - touch1.clientX, 2) + 
       Math.pow(touch2.clientY - touch1.clientY, 2)
     );
   }, []);
 
-  const getPinchDistance = useCallback((touches: TouchList): number => {
+  const getPinchDistance = useCallback((touches: React.TouchList): number => {
     if (touches.length < 2) return 0;
     return calculateDistance(touches[0], touches[1]);
   }, [calculateDistance]);
 
-  const handleTouchStart = useCallback((event: TouchEvent) => {
+  const handleTouchStart = useCallback((event: React.TouchEvent) => {
     const touch = event.touches[0];
     touchStartRef.current = touch;
     touchStartTimeRef.current = Date.now();
@@ -77,7 +77,7 @@ export const useGestures = (
     }
   }, [handlers, mergedConfig.preventScroll, getPinchDistance]);
 
-  const handleTouchMove = useCallback((event: TouchEvent) => {
+  const handleTouchMove = useCallback((event: React.TouchEvent) => {
     if (!touchStartRef.current) return;
 
     // 清除长按定时器
@@ -99,7 +99,7 @@ export const useGestures = (
     }
   }, [handlers, mergedConfig.preventScroll, getPinchDistance]);
 
-  const handleTouchEnd = useCallback((event: TouchEvent) => {
+  const handleTouchEnd = useCallback((event: React.TouchEvent) => {
     if (!touchStartRef.current) return;
 
     const touchEnd = event.changedTouches[0];

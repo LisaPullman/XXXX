@@ -1,7 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { NotificationContainer } from './components/ui/NotificationContainer';
-import { useThemeStore } from './stores/useThemeStore';
 import { PWAPrompt, PWABanner, OfflineIndicator, UpdatePrompt } from './components/pwa/PWAPrompt';
 
 // Pages
@@ -21,6 +20,9 @@ import { ProfileSetup } from './pages/ProfileSetup';
 import { ForgotPassword } from './pages/ForgotPassword';
 import { PrivacyPolicy } from './pages/PrivacyPolicy';
 import { TermsOfService } from './pages/TermsOfService';
+import { BaguaKnowledgePage } from './pages/BaguaKnowledgePage';
+import { BaguaAIDivinationPage } from './pages/BaguaAIDivinationPage';
+import { BaguaResultSharePage } from './pages/BaguaResultSharePage';
 
 import './App.css';
 
@@ -36,9 +38,10 @@ const TestPage = ({ title, color }: { title: string; color: string }) => {
 
 function App() {
   return (
-    <Router>
-      <div className="App">
-        <Routes>
+    <ErrorBoundary>
+      <Router>
+        <div className="App">
+          <Routes>
           <Route path="/" element={<HomeNew />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<RegisterSimple />} />
@@ -56,6 +59,9 @@ function App() {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/terms-of-service" element={<TermsOfService />} />
+          <Route path="/bagua/knowledge" element={<BaguaKnowledgePage />} />
+          <Route path="/bagua/ai-divination" element={<BaguaAIDivinationPage />} />
+          <Route path="/bagua/result/:resultId" element={<BaguaResultSharePage />} />
         </Routes>
         <NotificationContainer />
         
@@ -66,6 +72,7 @@ function App() {
         <UpdatePrompt />
       </div>
     </Router>
+    </ErrorBoundary>
   );
 }
 

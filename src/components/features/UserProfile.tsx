@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader } from '../ui/Card';
 import { Button } from '../ui/Button';
-import { useUserProfileStore, Achievement, GrowthMilestone } from '../../stores/useUserProfileStore';
+import { useUserProfileStore, Achievement } from '../../stores/useUserProfileStore';
 import { useTestHistoryStore } from '../../stores/useTestHistoryStore';
 import { cn } from '../../utils/cn';
 import { format } from 'date-fns';
@@ -24,7 +24,6 @@ export const UserProfile: React.FC<UserProfileProps> = ({ className }) => {
 
   const {
     profile,
-    achievements,
     growthMilestones,
     personalityInsights,
     createProfile,

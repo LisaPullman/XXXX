@@ -16,12 +16,12 @@
     "verbatimModuleSyntax": false,
 
     /* Linting */
-    "strict": false,
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "noImplicitAny": false,
-    "strictNullChecks": false
+    "noImplicitAny": true,
+    "strictNullChecks": true
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]

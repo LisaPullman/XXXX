@@ -193,10 +193,7 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
   variant = 'default',
   loading = false
 }) => {
-  const confirmVariants = {
-    default: 'primary',
-    danger: 'outline'
-  };
+
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="sm" title={title}>

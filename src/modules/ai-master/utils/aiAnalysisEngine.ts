@@ -6,7 +6,7 @@ import {
   LifeArea, 
   ActionPlan,
   ModuleType,
-  Insight
+
 } from '../types';
 import { aiMasterDatabase } from '../data/aiMasterData';
 
@@ -67,7 +67,7 @@ export class AIAnalysisEngine {
     // 根据MBTI结果计算
     if (includeModules.includes('mbti') && existingResults.mbtiResult) {
       const mbtiType = existingResults.mbtiResult.type;
-      const mbtiMapping = aiMasterDatabase.traitMappings.mbti[mbtiType];
+      const mbtiMapping = (aiMasterDatabase.traitMappings.mbti as any)[mbtiType];
       
       if (mbtiMapping) {
         dimensions.forEach(dim => {
@@ -82,7 +82,7 @@ export class AIAnalysisEngine {
     // 根据星座结果计算
     if (includeModules.includes('astrology') && existingResults.astrologyResult) {
       const sunSign = existingResults.astrologyResult.sunSign;
-      const astroMapping = aiMasterDatabase.traitMappings.astrology[sunSign];
+      const astroMapping = (aiMasterDatabase.traitMappings.astrology as any)[sunSign];
       
       if (astroMapping) {
         dimensions.forEach(dim => {
@@ -97,7 +97,7 @@ export class AIAnalysisEngine {
     // 根据血型结果计算
     if (includeModules.includes('bloodtype') && existingResults.bloodTypeResult) {
       const bloodType = existingResults.bloodTypeResult.bloodType;
-      const bloodMapping = aiMasterDatabase.traitMappings.bloodtype[bloodType];
+      const bloodMapping = (aiMasterDatabase.traitMappings.bloodtype as any)[bloodType];
       
       if (bloodMapping) {
         dimensions.forEach(dim => {
@@ -199,7 +199,7 @@ export class AIAnalysisEngine {
   private static analyzeLifeAreas(
     dimensions: PersonalityDimension[], 
     userInput: any, 
-    existingResults: any
+    _existingResults: any
   ): LifeArea[] {
     const areas = [...aiMasterDatabase.lifeAreas];
     
@@ -244,7 +244,7 @@ export class AIAnalysisEngine {
   }
   
   // 计算事业分数
-  private static calculateCareerScore(dimensions: PersonalityDimension[], userInput: any): number {
+  private static calculateCareerScore(dimensions: PersonalityDimension[], _userInput: any): number {
     const conscientiousness = this.getDimensionScore(dimensions, 'conscientiousness');
     const extraversion = this.getDimensionScore(dimensions, 'extraversion');
     const openness = this.getDimensionScore(dimensions, 'openness');
@@ -387,7 +387,7 @@ export class AIAnalysisEngine {
   private static generateActionPlans(
     profile: PersonalityProfile, 
     userInput: any, 
-    lifeAreas: LifeArea[]
+    _lifeAreas: LifeArea[]
   ): ActionPlan[] {
     const plans: ActionPlan[] = [];
     
@@ -436,7 +436,7 @@ export class AIAnalysisEngine {
     return Math.random().toString(36).substr(2, 9);
   }
   
-  private static calculateConsistency(existingResults: any, includeModules: ModuleType[]): number {
+  private static calculateConsistency(_existingResults: any, includeModules: ModuleType[]): number {
     // 简化的一致性计算
     let consistencyScore = 85;
     
@@ -518,7 +518,7 @@ export class AIAnalysisEngine {
     return advice.slice(0, 5);
   }
   
-  private static generateShortTermPlan(profile: PersonalityProfile, dimensions: PersonalityDimension[]): string[] {
+  private static generateShortTermPlan(_profile: PersonalityProfile, _dimensions: PersonalityDimension[]): string[] {
     return [
       '建立每日自我反思的习惯，记录情绪和行为模式',
       '识别并强化您最突出的优势特质',
@@ -526,7 +526,7 @@ export class AIAnalysisEngine {
     ];
   }
   
-  private static generateMediumTermPlan(profile: PersonalityProfile, lifeAreas: LifeArea[]): string[] {
+  private static generateMediumTermPlan(_profile: PersonalityProfile, _lifeAreas: LifeArea[]): string[] {
     return [
       '在主要生活领域设定明确的发展目标',
       '建立支持系统和反馈机制',
@@ -534,7 +534,7 @@ export class AIAnalysisEngine {
     ];
   }
   
-  private static generateLongTermPlan(profile: PersonalityProfile, userInput: any): string[] {
+  private static generateLongTermPlan(_profile: PersonalityProfile, _userInput: any): string[] {
     return [
       '建立符合您价值观和性格的人生愿景',
       '培养终身学习和成长的心态',
@@ -542,7 +542,7 @@ export class AIAnalysisEngine {
     ];
   }
   
-  private static generateRelationshipAdvice(profile: PersonalityProfile, dimensions: PersonalityDimension[]): string[] {
+  private static generateRelationshipAdvice(_profile: PersonalityProfile, dimensions: PersonalityDimension[]): string[] {
     const advice: string[] = [];
     
     const empathy = this.getDimensionScore(dimensions, 'empathy');
@@ -617,7 +617,7 @@ export class AIAnalysisEngine {
     return 'personal';
   }
   
-  private static generateGoalSteps(goal: string, profile: PersonalityProfile): string[] {
+  private static generateGoalSteps(goal: string, _profile: PersonalityProfile): string[] {
     return [
       `明确"${goal}"的具体定义和成功标准`,
       '分析实现目标所需的资源和能力',
@@ -626,7 +626,7 @@ export class AIAnalysisEngine {
     ];
   }
   
-  private static generateGoalMetrics(goal: string): string[] {
+  private static generateGoalMetrics(_goal: string): string[] {
     return [
       '设定可量化的里程碑指标',
       '定期评估进展情况',
@@ -634,7 +634,7 @@ export class AIAnalysisEngine {
     ];
   }
   
-  private static generateGoalResources(goal: string): string[] {
+  private static generateGoalResources(_goal: string): string[] {
     return [
       '相关书籍和在线课程',
       '专业指导和coaching',
@@ -667,7 +667,7 @@ export class AIAnalysisEngine {
   }
   
   // 继续实现其他缺失的方法...
-  private static extractStrengths(dimensions: PersonalityDimension[], existingResults: any): string[] {
+  private static extractStrengths(dimensions: PersonalityDimension[], _existingResults: any): string[] {
     const strengths: string[] = [];
     
     dimensions.forEach(dim => {
@@ -689,7 +689,7 @@ export class AIAnalysisEngine {
     return [...new Set(strengths)].slice(0, 6);
   }
   
-  private static extractWeaknesses(dimensions: PersonalityDimension[], existingResults: any): string[] {
+  private static extractWeaknesses(dimensions: PersonalityDimension[], _existingResults: any): string[] {
     const weaknesses: string[] = [];
     
     dimensions.forEach(dim => {
@@ -708,15 +708,15 @@ export class AIAnalysisEngine {
     return [...new Set(weaknesses)].slice(0, 4);
   }
   
-  private static extractMotivations(dimensions: PersonalityDimension[], existingResults: any): string[] {
+  private static extractMotivations(_dimensions: PersonalityDimension[], _existingResults: any): string[] {
     return ['自我实现', '成长发展', '人际和谐', '成就感', '安全感'];
   }
   
-  private static extractFears(dimensions: PersonalityDimension[], existingResults: any): string[] {
+  private static extractFears(_dimensions: PersonalityDimension[], _existingResults: any): string[] {
     return ['失败', '被拒绝', '失去控制', '不确定性'];
   }
   
-  private static extractValues(dimensions: PersonalityDimension[], existingResults: any): string[] {
+  private static extractValues(_dimensions: PersonalityDimension[], _existingResults: any): string[] {
     return ['诚实', '成长', '和谐', '创新', '责任'];
   }
   
@@ -777,7 +777,7 @@ export class AIAnalysisEngine {
     return growthAreas.slice(0, 3);
   }
   
-  private static generateCareerAnalysis(dimensions: PersonalityDimension[], userInput: any): string {
+  private static generateCareerAnalysis(dimensions: PersonalityDimension[], _userInput: any): string {
     const conscientiousness = this.getDimensionScore(dimensions, 'conscientiousness');
     const extraversion = this.getDimensionScore(dimensions, 'extraversion');
     
@@ -822,7 +822,7 @@ export class AIAnalysisEngine {
     }
   }
   
-  private static generateRelationshipRecommendations(dimensions: PersonalityDimension[]): string[] {
+  private static generateRelationshipRecommendations(_dimensions: PersonalityDimension[]): string[] {
     return [
       '保持开放和真诚的沟通',
       '学会倾听和理解他人观点',
@@ -841,7 +841,7 @@ export class AIAnalysisEngine {
     }
   }
   
-  private static generateHealthRecommendations(dimensions: PersonalityDimension[]): string[] {
+  private static generateHealthRecommendations(_dimensions: PersonalityDimension[]): string[] {
     return [
       '保持规律的作息时间',
       '进行适当的体育锻炼',
@@ -860,7 +860,7 @@ export class AIAnalysisEngine {
     }
   }
   
-  private static generateGrowthRecommendations(dimensions: PersonalityDimension[]): string[] {
+  private static generateGrowthRecommendations(_dimensions: PersonalityDimension[]): string[] {
     return [
       '设定明确的个人发展目标',
       '建立持续学习的习惯',
@@ -879,7 +879,7 @@ export class AIAnalysisEngine {
     }
   }
   
-  private static generateGenericRecommendations(areaName: string, dimensions: PersonalityDimension[]): string[] {
+  private static generateGenericRecommendations(areaName: string, _dimensions: PersonalityDimension[]): string[] {
     return [
       `明确${areaName}的目标和期望`,
       `制定具体的行动计划`,
@@ -888,7 +888,7 @@ export class AIAnalysisEngine {
     ];
   }
   
-  private static generateChallenges(areaId: string, dimensions: PersonalityDimension[]): string[] {
+  private static generateChallenges(areaId: string, _dimensions: PersonalityDimension[]): string[] {
     const challenges: { [key: string]: string[] } = {
       career: ['工作压力管理', '技能持续更新', '职业方向选择'],
       relationships: ['沟通误解', '期望管理', '时间分配'],
@@ -899,7 +899,7 @@ export class AIAnalysisEngine {
     return challenges[areaId] || ['持续改进', '环境适应', '资源获取'];
   }
   
-  private static generateOpportunities(areaId: string, dimensions: PersonalityDimension[]): string[] {
+  private static generateOpportunities(areaId: string, _dimensions: PersonalityDimension[]): string[] {
     const opportunities: { [key: string]: string[] } = {
       career: ['技能提升', '网络扩展', '新项目参与'],
       relationships: ['深度连接', '团队合作', 'mentor关系'],

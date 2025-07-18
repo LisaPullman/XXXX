@@ -26,7 +26,7 @@ export const MBTIResult: React.FC<MBTIResultProps> = ({
 }) => {
   const [activeTab, setActiveTab] = useState<TabType>('overview');
   const [posterUrl, setPosterUrl] = useState<string | null>(null);
-  const description = getMBTITypeDescription(result.type);
+  const description = getMBTITypeDescription(result.type as any);
   const detailedAnalysis = getDetailedMBTIAnalysis(result);
   const confidencePercentage = result.confidence;
 

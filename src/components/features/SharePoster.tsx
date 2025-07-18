@@ -24,7 +24,7 @@ export const SharePoster: React.FC<SharePosterProps> = ({
   const [isGenerating, setIsGenerating] = useState(false);
   const [posterUrl, setPosterUrl] = useState<string | null>(null);
   
-  const description = getMBTITypeDescription(mbtiResult.type);
+  const description = getMBTITypeDescription(mbtiResult.type as any);
 
   const generatePoster = async () => {
     if (!canvasRef.current) return;
@@ -201,7 +201,7 @@ async function drawCosmicTemplate(
   canvas: HTMLCanvasElement,
   result: MBTIResult,
   description: any,
-  userProfile?: any
+  _userProfile?: any
 ) {
   const { width, height } = canvas;
 
@@ -270,7 +270,7 @@ async function drawMinimalTemplate(
   canvas: HTMLCanvasElement,
   result: MBTIResult,
   description: any,
-  userProfile?: any
+  _userProfile?: any
 ) {
   const { width, height } = canvas;
 
@@ -332,7 +332,7 @@ async function drawMysticTemplate(
   canvas: HTMLCanvasElement,
   result: MBTIResult,
   description: any,
-  userProfile?: any
+  _userProfile?: any
 ) {
   const { width, height } = canvas;
 

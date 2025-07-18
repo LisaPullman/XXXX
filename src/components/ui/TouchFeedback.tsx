@@ -30,16 +30,19 @@ export const TouchFeedback: React.FC<TouchFeedbackProps> = ({
       scale: 'active:scale-[0.98]',
       opacity: 'active:opacity-80',
       glow: 'active:shadow-lg',
+      ripple: '',
     },
     medium: {
       scale: 'active:scale-[0.96]',
       opacity: 'active:opacity-70',
       glow: 'active:shadow-xl',
+      ripple: '',
     },
     strong: {
       scale: 'active:scale-[0.94]',
       opacity: 'active:opacity-60',
       glow: 'active:shadow-2xl',
+      ripple: '',
     }
   };
 

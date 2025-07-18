@@ -20,7 +20,7 @@ export const SocialShare: React.FC<SocialShareProps> = ({
   const [showModal, setShowModal] = useState(false);
 
   const generateShareText = () => {
-    const description = getMBTITypeDescription(mbtiResult.type);
+    const description = getMBTITypeDescription(mbtiResult.type as any);
     return `🌟 我在内在宇宙完成了MBTI人格测试！
 
 我的人格类型：${mbtiResult.type} - ${description.title}

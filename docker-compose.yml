@@ -45,7 +45,7 @@ services:
 
   # Redis缓存服务
   redis:
-    image: redis:7-alpine
+    image: redis:7.2-alpine
     container_name: inner-cosmos-redis
     ports:
       - "6379:6379"
@@ -58,7 +58,7 @@ services:
 
   # MongoDB数据库 (可选，推荐使用云数据库)
   # mongodb:
-  #   image: mongo:6
+  #   image: mongo:7.0
   #   container_name: inner-cosmos-mongodb
   #   ports:
   #     - "27017:27017"
@@ -69,6 +69,22 @@ services:
   #   volumes:
   #     - mongodb_data:/data/db
   #     - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+  #   restart: unless-stopped
+  #   networks:
+  #     - inner-cosmos-network
+
+  # PostgreSQL数据库 (可选)
+  # postgres:
+  #   image: postgres:16-alpine
+  #   container_name: inner-cosmos-postgres
+  #   ports:
+  #     - "5432:5432"
+  #   environment:
+  #     - POSTGRES_DB=inner_cosmos
+  #     - POSTGRES_USER=${POSTGRES_USER}
+  #     - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
   #   restart: unless-stopped
   #   networks:
   #     - inner-cosmos-network
@@ -103,6 +119,7 @@ services:
 volumes:
   redis_data:
   # mongodb_data:
+  # postgres_data:
   # prometheus_data:
   # grafana_data:
 

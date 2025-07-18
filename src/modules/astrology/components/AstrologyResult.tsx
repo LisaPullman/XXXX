@@ -23,9 +23,9 @@ export const AstrologyResult: React.FC<AstrologyResultProps> = ({
   const [activeTab, setActiveTab] = useState<TabType>('overview');
   const [compatibilitySign, setCompatibilitySign] = useState<ZodiacSign>('aries');
   
-  const zodiacInfo = astrologyCalculator.getZodiacInfo(result.sunSign);
-  const dailyHoroscope = astrologyCalculator.getDailyHoroscope(result.sunSign);
-  const compatibility = astrologyCalculator.calculateCompatibility(result.sunSign, compatibilitySign);
+  const zodiacInfo = astrologyCalculator.getZodiacInfo(result.birthChart.sunSign);
+  const dailyHoroscope = astrologyCalculator.getDailyHoroscope(result.birthChart.sunSign);
+  const compatibility = astrologyCalculator.calculateCompatibility(result.birthChart.sunSign, compatibilitySign);
 
   const tabs = [
     { id: 'overview' as TabType, label: '星座概览', icon: '⭐' },
@@ -47,11 +47,7 @@ export const AstrologyResult: React.FC<AstrologyResultProps> = ({
     water: '🌊'
   };
 
-  const qualityDescriptions = {
-    cardinal: '开创型 - 善于开始新事物',
-    fixed: '固定型 - 坚持不懈，意志坚定',
-    mutable: '变动型 - 适应性强，灵活变通'
-  };
+
 
   const zodiacSigns: { sign: ZodiacSign; name: string; symbol: string }[] = [
     { sign: 'aries', name: '白羊座', symbol: '♈' },
@@ -74,7 +70,7 @@ export const AstrologyResult: React.FC<AstrologyResultProps> = ({
       <Card className="relative overflow-hidden">
         <div className={cn(
           'absolute inset-0 bg-gradient-to-br opacity-10',
-          elementColors[result.element]
+          elementColors[result.birthChart.dominantElement]
         )}></div>
         
         <CardHeader className="relative text-center">
@@ -90,12 +86,12 @@ export const AstrologyResult: React.FC<AstrologyResultProps> = ({
             </div>
             <div className="flex justify-center space-x-6 text-sm">
               <div className="flex items-center space-x-1">
-                <span>{elementEmojis[result.element]}</span>
-                <span className="font-medium">{result.element === 'fire' ? '火' : result.element === 'earth' ? '土' : result.element === 'air' ? '风' : '水'}象星座</span>
+                <span>{elementEmojis[result.birthChart.dominantElement]}</span>
+                <span className="font-medium">{result.birthChart.dominantElement === 'fire' ? '火' : result.birthChart.dominantElement === 'earth' ? '土' : result.birthChart.dominantElement === 'air' ? '风' : '水'}象星座</span>
               </div>
               <div className="flex items-center space-x-1">
                 <span>🪐</span>
-                <span className="font-medium">守护星：{result.rulingPlanet}</span>
+                <span className="font-medium">守护星：{zodiacInfo.rulingPlanet}</span>
               </div>
             </div>
           </div>
@@ -174,7 +170,7 @@ export const AstrologyResult: React.FC<AstrologyResultProps> = ({
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {result.traits.map((trait, index) => (
+                {zodiacInfo.traits.positive.map((trait: string, index: number) => (
                   <p key={index} className="text-gray-700 leading-relaxed">
                     • {trait}
                   </p>
@@ -191,7 +187,7 @@ export const AstrologyResult: React.FC<AstrologyResultProps> = ({
               </CardHeader>
               <CardContent>
                 <div className="flex flex-wrap gap-2">
-                  {result.luckyNumbers.map((number, index) => (
+                  {zodiacInfo.luckyNumbers.map((number: number, index: number) => (
                     <span 
                       key={index}
                       className="w-10 h-10 bg-purple-100 text-purple-700 rounded-full flex items-center justify-center font-bold"
@@ -209,7 +205,7 @@ export const AstrologyResult: React.FC<AstrologyResultProps> = ({
               </CardHeader>
               <CardContent>
                 <div className="flex flex-wrap gap-2">
-                  {result.luckyColors.map((color, index) => (
+                  {zodiacInfo.luckyColors.map((color: string, index: number) => (
                     <span 
                       key={index}
                       className="px-3 py-1 bg-pink-100 text-pink-700 rounded-full text-sm font-medium"

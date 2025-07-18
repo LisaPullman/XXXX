@@ -1,5 +1,5 @@
-import { TarotCard, TarotSpread, TarotReading } from '../types';
-import { allTarotCards, tarotSpreads } from '../data/tarotData';
+import { TarotCard, TarotReading } from '../types';
+import { allTarotCards } from '../data/tarotData';
 
 // 塔罗牌解读算法类
 export class TarotCalculator {

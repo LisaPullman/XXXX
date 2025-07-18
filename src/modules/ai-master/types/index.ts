@@ -123,11 +123,13 @@ export interface AIMessage {
   timestamp: Date;
   sender: 'user' | 'ai';
   content: string;
-  messageType: 'text' | 'analysis' | 'recommendation' | 'question';
+  messageType: 'text' | 'analysis' | 'recommendation' | 'question' | 'crisis_support';
   metadata?: {
     confidence?: number;
     sources?: string[];
     relatedInsights?: string[];
+    isAIGenerated?: boolean;
+    fallbackReason?: string;
   };
 }
 
